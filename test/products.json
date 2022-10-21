@@ -1,0 +1,260 @@
+{
+  "addToCartFromPLPCategories": [
+    {
+      "key": "Hero_TopSelling",
+      "value": true
+    },
+    {
+      "key": "hero-asia",
+      "value": false
+    },
+    {
+      "key": "Hero_Life",
+      "value": false
+    },
+    {
+      "key": "Hero_Clean",
+      "value": true
+    },
+    {
+      "key": "hot-buys",
+      "value": true
+    },
+    {
+      "key": "hero_prevention",
+      "value": false
+    },
+    {
+      "key": "Hero_School",
+      "value": false
+    },
+    {
+      "key": "hero_pg",
+      "value": false
+    },
+    {
+      "key": "PNG",
+      "value": false
+    },
+    {
+      "key": "hero",
+      "value": false
+    },
+    {
+      "key": "CL14",
+      "value": false
+    },
+    {
+      "key": "Ariel",
+      "value": false
+    },
+    {
+      "key": "21double-buy",
+      "value": false
+    },
+    {
+      "key": "Hero_HomeSupplies",
+      "value": false
+    },
+    {
+      "key": "915",
+      "value": true
+    },
+    {
+      "key": "hero-Cost-effective",
+      "value": false
+    },
+    {
+      "key": "Hero_Japan",
+      "value": false
+    },
+    {
+      "key": "14",
+      "value": true
+    },
+    {
+      "key": "brands",
+      "value": false
+    },
+    {
+      "key": "hero-refillpacks",
+      "value": false
+    },
+    {
+      "key": "decal-position-1-MVM",
+      "value": false
+    },
+    {
+      "key": "91502",
+      "value": true
+    },
+    {
+      "key": "Wallet",
+      "value": true
+    },
+    {
+      "key": "hero-5000",
+      "value": false
+    },
+    {
+      "key": "hero-CleaningTips",
+      "value": false
+    },
+    {
+      "key": "hero_household",
+      "value": false
+    },
+    {
+      "key": "Hero_Wash",
+      "value": false
+    },
+    {
+      "key": "Hero_Houseware",
+      "value": false
+    },
+    {
+      "key": "21double-5000",
+      "value": false
+    },
+    {
+      "key": "costco",
+      "value": false
+    },
+    {
+      "key": "Hero_JPnKR",
+      "value": false
+    },
+    {
+      "key": "Hero_Laundry",
+      "value": false
+    },
+    {
+      "key": "hero_hotsearch",
+      "value": false
+    }
+  ],
+  "addableToCartFromListingPage": true,
+  "availableForPreorder": false,
+  "averageRating": 4.9,
+  "basePrice": {
+    "currencyIso": "TWD",
+    "formattedPriceForSetOfTwoQuantities": "$1,798",
+    "formattedValue": "$899",
+    "priceType": "BUY",
+    "value": 899
+  },
+  "businessDelivery": false,
+  "code": "217455",
+  "couponDiscount": {
+    "discountType": "default",
+    "discountValue": 180,
+    "discountValueExcVat": 171,
+    "formattedDiscountValue": "$180",
+    "formattedDiscountValueExcVat": "$171",
+    "hideDiscountCalculation": false
+  },
+  "decalData": [
+    {
+      "key": "1",
+      "value": {
+        "altText": "Costco好市多優惠特價商品",
+        "position": 1,
+        "url": "/mediapermalink/decal_HOT2"
+      }
+    }
+  ],
+  "departmentNumber": "",
+  "discountPrice": {
+    "currencyIso": "TWD",
+    "formattedValue": "$180",
+    "priceType": "BUY",
+    "value": 180
+  },
+  "displayExVatPrice": false,
+  "englishName": "Ariel Liquid Laundry Detergent Refill 1260 g X 6-Count",
+  "expeditedDelivery": false,
+  "hasPricePerUnit": true,
+  "hidePriceValue": false,
+  "images": [
+    {
+      "format": "thumbnail",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h29/h74/49770572316702.jpg"
+    },
+    {
+      "format": "product",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h21/ha1/49770570579998.jpg"
+    },
+    {
+      "format": "results",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h85/hc4/49770571169822.jpg"
+    },
+    {
+      "format": "carousel",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h85/hc4/49770571169822.jpg"
+    },
+    {
+      "format": "thumbnail-webp",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h7a/h56/70288425975838.webp"
+    },
+    {
+      "format": "product-webp",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h5f/h40/70288426369054.webp"
+    },
+    {
+      "format": "results-webp",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h98/hc3/70288426631198.webp"
+    },
+    {
+      "format": "carousel-webp",
+      "imageType": "PRIMARY",
+      "url": "/medias/sys_master/images/h98/hc3/70288426631198.webp"
+    }
+  ],
+  "inRestrictedZone": false,
+  "isBaseProduct": false,
+  "maxOrderQuantity": 500,
+  "membershipRestrictionApplied": false,
+  "minOrderQuantity": 1,
+  "modulusItemQuantity": 1,
+  "multiProduct": false,
+  "name": "Ariel 抗菌抗臭洗衣精補充包 1260公克 X 6入",
+  "needUserConsent": false,
+  "numberOfReviews": 1141,
+  "price": {
+    "currencyIso": "TWD",
+    "formattedPriceForSetOfTwoQuantities": "$1,438",
+    "formattedValue": "$719",
+    "priceType": "BUY",
+    "value": 719
+  },
+  "pricePerUnit": {
+    "currencyIso": "TWD",
+    "formattedValue": "$5",
+    "priceType": "BUY",
+    "value": 5
+  },
+  "productCartGroupAvailableInWarehouse": false,
+  "purchasable": true,
+  "randomWeight": false,
+  "requiresAgeVerification": false,
+  "shippingIncluded": false,
+  "shippingRestrictionApplied": false,
+  "stock": {
+    "contactDay": 0,
+    "deliveryLeadTime": 0,
+    "stockLevelStatus": "inStock"
+  },
+  "tire": false,
+  "unitType": "蓋杯",
+  "url": "/Household-Pet-Supplies/Cleaning-Laundry-Products/Laundry/Ariel-Liquid-Laundry-Detergent-Refill-1260-g-X-6-Count/p/217455",
+  "validExVatData": true,
+  "warehouseFulfilled": false,
+  "warehouseHidePriceValue": false
+}
