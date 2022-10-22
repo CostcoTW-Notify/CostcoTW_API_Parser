@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime
 
 
 class OnSaleInfo:
@@ -45,6 +46,8 @@ class Product:
         self.hidePriceValue: bool = False
         # Note
         self.decalData: Optional['dict'] = None
+        # 快照時間
+        self.snapshotTime = datetime.utcnow()
 
     @property
     def now_on_sale(self):
@@ -118,3 +121,10 @@ class Product:
 
     def __repr__(self) -> str:
         return f'[{self.code}] {self.zhName} : {self.price}'
+
+    def to_dict(self) -> dict:
+        prod_dict = self.__dict__
+        prod_dict['onSaleInfo'] = self.onSaleInfo.__dict__
+        prod_dict['stockStatus'] = self.stockStatus.__dict__
+
+        return prod_dict
