@@ -1,1 +1,1 @@
-from app.services.product_parser import fetch_all_products
+from app.services.snapshot_service import snapshot_all_products

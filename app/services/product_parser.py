@@ -1,5 +1,5 @@
 from typing import Optional
-from models import Product
+from app.models import Product
 import httpx
 
 headers = {

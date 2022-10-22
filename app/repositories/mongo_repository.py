@@ -1,4 +1,3 @@
-import json
 from pymongo import MongoClient
 from app.models import Product
 from os import getenv
@@ -26,10 +25,12 @@ class MongoRepository:
     def insert_product(self, product: Product):
 
         collection = self._get_snapshot_collection()
-        collection.insert_one(product.to_dict())
+        result = collection.insert_one(product.to_dict())
+        return result
 
     def insert_products(self, products: list[Product]):
 
         products_dict = [p.to_dict() for p in products]
         collection = self._get_snapshot_collection()
-        collection.insert_many(products_dict)
+        result = collection.insert_many(products_dict)
+        return result.acknowledged

@@ -1,9 +1,11 @@
 
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+import app.router as app_router
 from os import getenv
 
 asgi_app = FastAPI()
+asgi_app.include_router(app_router.SnapshotRouter)
 
 
 @asgi_app.on_event('startup')
