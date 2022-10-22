@@ -1,1 +1,1 @@
-from app.service.product_parser import fetch_all_products
+from app.services.product_parser import fetch_all_products

@@ -11,14 +11,21 @@
       "module": "uvicorn",
       "args": ["app:asgi_app", "--reload"],
       "jinja": true,
-      "justMyCode": true
+      "justMyCode": true,
+      "env": {
+        "mongo_conn_str": "mongodb://localhost:27017/CostcoTW_Notify",
+        "snapshot_collection": "Daily_Snapshot"
+      }
     },
     {
       "name": "Python: Test debug config",
       "type": "python",
       "request": "test",
       "console": "integratedTerminal",
-      "logToFile": true
+      "logToFile": true,
+      "env": {
+        "setting": "this is env from vscode"
+      }
     }
   ]
 }

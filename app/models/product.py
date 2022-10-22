@@ -124,7 +124,7 @@ class Product:
 
     def to_dict(self) -> dict:
         prod_dict = self.__dict__
-        prod_dict['onSaleInfo'] = self.onSaleInfo.__dict__
+        prod_dict['onSaleInfo'] = self.onSaleInfo.__dict__ if self.onSaleInfo is not None else None
         prod_dict['stockStatus'] = self.stockStatus.__dict__
 
         return prod_dict
