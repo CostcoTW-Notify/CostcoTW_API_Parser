@@ -46,7 +46,7 @@ def test_insert_product_will_call_mongo_collection(mocker: MockerFixture):
     collection_insert.assert_called_once()
 
 
-def test_insert_product_will_call_mongo_collection(mocker: MockerFixture):
+def test_insert_products_will_call_mongo_collection(mocker: MockerFixture):
 
     collection = MagicMock()
     mocker.patch.object(MongoRepo.MongoRepository,
