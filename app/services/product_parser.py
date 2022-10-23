@@ -2,11 +2,6 @@ from typing import Optional
 from app.models import Product
 import httpx
 
-headers = {
-    'user-agent': 'CostcoTW-Notify 0.1',
-    'accept': 'application/json'
-}
-
 
 def _convert_products(products: list):
     return [Product.parse(p) for p in products]
@@ -43,6 +38,11 @@ async def _fetch_from_costco_tw(category: Optional['str'] = None) -> list:
                 })
 
             params['currentPage'] = curr_page
+
+            headers = client.headers
+            headers['User-Agent'] += " CostcoTW-Notify/0.1"
+            headers['Accept'] = 'application/json'
+            client.headers = headers
 
             try:
                 response = await client.get(costco_url, params=params, headers=headers)
