@@ -7,7 +7,7 @@ def _convert_products(products: list):
     return [Product.parse(p) for p in products]
 
 
-async def _fetch_from_costco_tw(category: Optional['str'] = None) -> list:
+async def _fetch_from_costco_tw(category: Optional['str'] = None) -> list[Product]:
     costco_url = 'https://www.costco.com.tw/rest/v2/taiwan/products/search'
     params = {
         'pageSize': '100',
@@ -21,7 +21,7 @@ async def _fetch_from_costco_tw(category: Optional['str'] = None) -> list:
         # params['category'] = 'hot-buys'
         params['category'] = category
 
-    products = []
+    products: list[Product] = []
     curr_page = 0
     max_page = float('inf')
     error_count = 0
@@ -61,7 +61,7 @@ async def _fetch_from_costco_tw(category: Optional['str'] = None) -> list:
             json = response.json()
             curr_page += 1
 
-            products = products + json['products']
+            products = products + _convert_products(json['products'])
 
             if (max_page == float('inf')):
                 max_page = json['pagination']['totalPages']
@@ -73,15 +73,15 @@ async def _fetch_from_costco_tw(category: Optional['str'] = None) -> list:
     return products
 
 
-async def fetch_all_products() -> list:
+async def fetch_all_products() -> list[Product]:
 
     all_products = await _fetch_from_costco_tw()
 
-    return _convert_products(all_products)
+    return all_products
 
 
-async def fetch_category_products(category: str):
+async def fetch_category_products(category: str) -> list[Product]:
 
     products_in_category = await _fetch_from_costco_tw(category)
 
-    return _convert_products(products_in_category)
+    return products_in_category
