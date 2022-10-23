@@ -26,11 +26,11 @@ class MongoRepository:
 
         collection = self._get_snapshot_collection()
         result = collection.insert_one(product.to_dict())
-        return result
+        return result.inserted_id
 
-    def insert_products(self, products: list[Product]):
+    def insert_products(self, products: list[Product]) -> list:
 
         products_dict = [p.to_dict() for p in products]
         collection = self._get_snapshot_collection()
         result = collection.insert_many(products_dict)
-        return result.acknowledged
+        return result.inserted_ids
