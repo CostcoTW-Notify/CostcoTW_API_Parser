@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from app import services
+from app.services import SnapshotService, CostcoApiService
+from app.repositories import SnapshotRepository
 
 router = APIRouter(prefix='/snapshot')
 
@@ -7,7 +8,10 @@ router = APIRouter(prefix='/snapshot')
 @router.post('/execute')
 async def snapshot_all_product():
 
-    result = await services.snapshot_all_products()
+    service = SnapshotService(SnapshotRepository(), CostcoApiService())
+
+    result = await service.snapshot_all_products()
+
     return {
         'status': 'Done',
         'snapshot_count': len(result)
