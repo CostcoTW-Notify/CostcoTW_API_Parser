@@ -13,8 +13,7 @@
       "jinja": true,
       "justMyCode": true,
       "env": {
-        "mongo_conn_str": "mongodb://localhost:27017/CostcoTW_Notify",
-        "snapshot_collection": "Daily_Snapshot"
+        "mongo_conn_str": "mongodb://localhost:27017/CostcoTW_Notify"
       }
     },
     {

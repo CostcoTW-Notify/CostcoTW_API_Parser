@@ -16,10 +16,6 @@ def check_env():
     if mongo_conn_str is None:
         raise KeyError('env: mongo_conn_str not setup..')
 
-    name = getenv('snapshot_collection')
-    if name is None:
-        raise KeyError('env: snapshot_collection_name not setup...')
-
 
 @asgi_app.middleware('http')
 async def error_handler(request: Request, call_next):

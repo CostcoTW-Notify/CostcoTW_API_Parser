@@ -1,1 +1,1 @@
-from app.repositories.mongo_repository import MongoRepository
+from app.repositories.SnapshotRepository import SnapshotRepository
