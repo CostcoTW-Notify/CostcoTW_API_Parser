@@ -1,6 +1,6 @@
 
 from fastapi import FastAPI, Request
-from fastapi.responses import RedirectResponse, JSONResponse, Response
+from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.encoders import jsonable_encoder
 import app.router as app_router
 from os import getenv
@@ -8,6 +8,7 @@ from os import getenv
 asgi_app = FastAPI()
 asgi_app.include_router(app_router.SnapshotRouter)
 asgi_app.include_router(app_router.SearchRouter)
+asgi_app.include_router(app_router.ProductRouter)
 
 
 @asgi_app.on_event('startup')

@@ -20,3 +20,8 @@ class SnapshotRepository(MongoRepository):
         products_dict = [dict(p) for p in products]
         result = self.collection.insert_many(products_dict)
         return result.inserted_ids
+
+    def get_products(self, query) -> list[Product]:
+
+        result = list(self.collection.find(query))
+        return result

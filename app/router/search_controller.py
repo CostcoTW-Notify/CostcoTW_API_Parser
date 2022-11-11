@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from app import services
+from app.services import CostcoApiService
 
 router = APIRouter(prefix='/search')
 
@@ -7,7 +8,8 @@ router = APIRouter(prefix='/search')
 @router.get('/count_hot_buys_products')
 async def count_hot_buys_category():
 
-    category_count = await services.fetch_category_products('hot-buys')
+    service = CostcoApiService()
+    category_count = await service.fetch_category_products('hot-buys')
 
     return {
         'status': '200',
