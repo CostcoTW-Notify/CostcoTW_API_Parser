@@ -6,7 +6,6 @@ import app.router as app_router
 from os import getenv
 
 asgi_app = FastAPI()
-asgi_app.include_router(app_router.SnapshotRouter)
 asgi_app.include_router(app_router.SearchRouter)
 asgi_app.include_router(app_router.ProductRouter)
 asgi_app.include_router(app_router.SubscriberRouter)
@@ -33,6 +32,9 @@ async def error_handler(request: Request, call_next):
             'error': str(e)
         }
         json = jsonable_encoder(error_data)
+        print("=========== Error ============")
+        print(json)
+        print("==============================")
         return JSONResponse(
             status_code=200,
             content=json)

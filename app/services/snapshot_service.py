@@ -18,7 +18,9 @@ class SnapshotService:
         }
         count = self.snapshot_repo.count_products(query_today_snapshot)
         if (count > 0):
-            raise Exception(
-                f"There is already exists today's snapshot in the database. snapshot count:{count}")
+            errorMessage = f"There is already exists today's snapshot in the database. snapshot count:{count}\n"
+            errorMessage += f"Today is gt:{DateTimeHelper.get_today_with_timezone()}  lt:{DateTimeHelper.get_today_with_timezone(+1)}"
+            raise Exception(errorMessage)
+
         products = await self.costco_service.fetch_all_products()
         return self.snapshot_repo.insert_products(products)
