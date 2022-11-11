@@ -1,5 +1,5 @@
 from pymongo.collection import Collection
-from app.repositories.MongoRepository import MongoRepository
+from app.repositories.mongo_repository import MongoRepository
 from app.models import Product
 
 
@@ -24,4 +24,8 @@ class SnapshotRepository(MongoRepository):
     def get_products(self, query) -> list[Product]:
 
         result = list(self.collection.find(query))
+        return result
+
+    def count_products(self, query) -> int:
+        result = self.collection.count_documents(query)
         return result

@@ -28,7 +28,7 @@ class ProductHelper:
         onSaleInfo: Optional[OnSaleInfo] = None
         if 'discountPrice' in json:
             onSaleInfo = OnSaleInfo(
-                basePrice=json['basePrice'], discountPrice=json['discountPrice']['value'])
+                basePrice=json['basePrice']['value'], discountPrice=json['discountPrice']['value'])
 
         product = Product(
             code=json['code'],

@@ -9,6 +9,7 @@ asgi_app = FastAPI()
 asgi_app.include_router(app_router.SnapshotRouter)
 asgi_app.include_router(app_router.SearchRouter)
 asgi_app.include_router(app_router.ProductRouter)
+asgi_app.include_router(app_router.SubscriberRouter)
 
 
 @asgi_app.on_event('startup')

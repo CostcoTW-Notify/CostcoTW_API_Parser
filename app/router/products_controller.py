@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from app.services import SnapshotService, CostcoApiService
 from app.repositories import SnapshotRepository
 from app.services.product_info_service import ProductInfoService
-from app.models.product import Product
 
 router = APIRouter(prefix='/products')
 
@@ -42,7 +41,7 @@ async def detect_today_new_best_buy_item():
 async def detect_today_new_onsale_item():
 
     service = ProductInfoService(SnapshotRepository())
-    items = service.detect_today_new_on_sale_items()
+    items = service.detect_today_new_onsale_items()
 
     result = [{
         "code": p['code'],

@@ -1,1 +1,1 @@
-from app.repositories.SnapshotRepository import SnapshotRepository
+from app.repositories.snapshot_repository import SnapshotRepository

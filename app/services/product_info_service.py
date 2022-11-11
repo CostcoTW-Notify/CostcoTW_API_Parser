@@ -8,7 +8,7 @@ class ProductInfoService:
     def __init__(self, repo: SnapshotRepository) -> None:
         self.snapshot_repo = repo
 
-    def detect_today_new_on_sale_items(self) -> list[Product]:
+    def detect_today_new_onsale_items(self) -> list[Product]:
         query_yesterday_onsale_item = {
             "snapshotTime": {
                 "$gt": DateTimeHelper.get_today_with_timezone(-1),

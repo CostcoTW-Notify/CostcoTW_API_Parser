@@ -1,5 +1,4 @@
 from fastapi import APIRouter
-from app import services
 from app.services import CostcoApiService
 
 router = APIRouter(prefix='/search')
