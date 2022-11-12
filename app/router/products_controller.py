@@ -1,7 +1,6 @@
 from fastapi import APIRouter
-from app.services import SnapshotService, CostcoApiService
+from app.services import SnapshotService, CostcoApiService, ProductInfoService
 from app.repositories import SnapshotRepository
-from app.services.product_info_service import ProductInfoService
 
 router = APIRouter(prefix='/products')
 

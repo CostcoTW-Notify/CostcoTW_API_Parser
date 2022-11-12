@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import datetime
-from app.models import Product, KeyValuePair, DecalInfo, OnSaleInfo, StockStatus
+from app.models.mongo.product import Product, KeyValuePair, DecalInfo, OnSaleInfo, StockStatus
 
 
 class ProductHelper:

@@ -13,7 +13,8 @@
       "jinja": true,
       "justMyCode": true,
       "env": {
-        "mongo_conn_str": "mongodb://localhost:27017/CostcoTW_Notify"
+        "mongo_conn_str": "mongodb://localhost:27017/CostcoTW_Notify",
+        "append_line_notify_endpoint": "https://localhost:8088/Message/Pending"
       }
     },
     {

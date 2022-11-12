@@ -1,6 +1,6 @@
 from app.repositories import SnapshotRepository
 from app.utility.datetime_helper import DateTimeHelper
-from app.models import Product
+from app.models.mongo.product import Product
 
 
 class ProductInfoService:

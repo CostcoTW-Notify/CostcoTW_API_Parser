@@ -17,6 +17,10 @@ def check_env():
     if mongo_conn_str is None:
         raise KeyError('env: mongo_conn_str not setup..')
 
+    append_line_notify_endpoint = getenv('append_line_notify_endpoint')
+    if append_line_notify_endpoint is None:
+        raise KeyError('evn: append_line_notify_endpoint not setup...')
+
 
 @asgi_app.middleware('http')
 async def error_handler(request: Request, call_next):
@@ -36,7 +40,7 @@ async def error_handler(request: Request, call_next):
         print(json)
         print("==============================")
         return JSONResponse(
-            status_code=200,
+            status_code=400,
             content=json)
 
 

@@ -1,5 +1,4 @@
-from typing import Optional
-from app.models.product import Product
+from app.models.mongo.product import Product
 
 
 class NotifyMessageHelper:

@@ -1,6 +1,6 @@
 import json
 import pytest
-from app.models.product import Product
+from app.models.mongo.product import Product
 from json import loads
 
 

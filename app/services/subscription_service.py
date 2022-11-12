@@ -1,22 +1,30 @@
-from app.repositories.chat_room_repository import ChatRoomRepository
-from app.services.product_info_service import ProductInfoService
-from app.utility.notify_message_helper import NotifyMessageHelper
-from app.services.line_notify_service import LineNotifyService
+from app.repositories import ExecuteLogRepository, SubscriptionRepository
+from app.services import ProductInfoService, LineNotifyService
+from app.utility import NotifyMessageHelper, DateTimeHelper
+from app.models.request.subscription_model import SubscriptionRequest
+from app.utility.constant import DAILY_NEW_BEST_BUY, DAILY_NEW_ONSALE
 
 
 class SubscriptionService:
 
     def __init__(self,
-                 repo: ChatRoomRepository,
                  product_service: ProductInfoService,
-                 line_notify_service: LineNotifyService) -> None:
+                 line_notify_service: LineNotifyService,
+                 subscription_repo: SubscriptionRepository,
+                 execute_log_repo: ExecuteLogRepository) -> None:
         self.product_service = product_service
-        self.chat_room_repo = repo
         self.line_notify_service = line_notify_service
+        self.execute_log_repo = execute_log_repo
+        self.subscription_repo = subscription_repo
 
     async def process_daily_new_onsale_subscription(self) -> None:
 
-        subscriber = self.chat_room_repo.get_daily_new_onsale_subscriber()
+        if self.execute_log_repo.check_today_already_execute(DAILY_NEW_ONSALE):
+            error_msg = f"The scenario : {DAILY_NEW_ONSALE} is already executed today.."
+            error_msg += f"Today is {DateTimeHelper.get_today_with_timezone()}"
+            raise Exception(error_msg)
+
+        subscriber = self.subscription_repo.get_subscription(DAILY_NEW_ONSALE)
         if len(subscriber) == 0:
             return
 
@@ -27,13 +35,21 @@ class SubscriptionService:
         messages = [
             NotifyMessageHelper.build_new_onsale_item_notify_message(p) for p in items]
 
-        await self.line_notify_service.SendNotify([s['Token'] for s in subscriber], messages)
+        await self.line_notify_service.appendPendingMessage([s['token'] for s in subscriber], messages)
+
+        self.execute_log_repo.create_today_execute_log(DAILY_NEW_ONSALE)
 
         return
 
     async def process_daily_new_best_buy_subscription(self) -> None:
 
-        subscriber = self.chat_room_repo.get_daily_new_best_buy_subscriber()
+        if self.execute_log_repo.check_today_already_execute(DAILY_NEW_BEST_BUY):
+            error_msg = f"The scenario : {DAILY_NEW_BEST_BUY} is already executed today.."
+            error_msg += f"Today is {DateTimeHelper.get_today_with_timezone()}"
+            raise Exception(error_msg)
+
+        subscriber = self.subscription_repo.get_subscription(
+            DAILY_NEW_BEST_BUY)
         if len(subscriber) == 0:
             return
 
@@ -44,7 +60,31 @@ class SubscriptionService:
         messages = [
             NotifyMessageHelper.build_new_best_buy_item_notify_message(p) for p in items]
 
-        await self.line_notify_service.SendNotify(
-            [s['Token'] for s in subscriber], messages)
+        await self.line_notify_service.appendPendingMessage(
+            [s['token'] for s in subscriber], messages)
 
+        self.execute_log_repo.create_today_execute_log(DAILY_NEW_BEST_BUY)
         return
+
+    async def create_new_subscription(self, subscription: SubscriptionRequest) -> bool:
+
+        result = self.subscription_repo.create_subscription({
+            "code": subscription.code,
+            "subscription_type": subscription.type,
+            "token": subscription.token
+        })
+        return result
+
+    async def delete_subscription(self, subscription: SubscriptionRequest) -> bool:
+
+        result = self.subscription_repo.delete_subscription({
+            "code": subscription.code,
+            "subscription_type": subscription.type,
+            "token": subscription.token
+        })
+        return result
+
+    async def delete_by_token(self, token: str) -> bool:
+
+        result = self.subscription_repo.delete_by_token(token)
+        return result

@@ -1,6 +1,6 @@
 from pymongo.collection import Collection
 from app.repositories.mongo_repository import MongoRepository
-from app.models import Product
+from app.models.mongo.product import Product
 
 
 class SnapshotRepository(MongoRepository):

@@ -1,6 +1,6 @@
 from typing import Optional
-from app.models import Product
-from app.utility.product_helper import ProductHelper
+from app.models.mongo.product import Product
+from app.utility import ProductHelper
 import httpx
 
 
@@ -79,3 +79,6 @@ class CostcoApiService:
                 print(f'fetch {curr_page}/{max_page} ...')
 
         return products
+
+    async def _fetch_product_by_code(self, code: str) -> Product:
+        return NotImplemented

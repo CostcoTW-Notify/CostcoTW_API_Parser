@@ -1,6 +1,6 @@
 from app.services.costco_api_service import CostcoApiService
 from app.repositories import SnapshotRepository
-from app.utility.datetime_helper import DateTimeHelper
+from app.utility import DateTimeHelper
 
 
 class SnapshotService:
@@ -23,4 +23,5 @@ class SnapshotService:
             raise Exception(errorMessage)
 
         products = await self.costco_service.fetch_all_products()
+
         return self.snapshot_repo.insert_products(products)

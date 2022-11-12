@@ -1,1 +1,3 @@
 from app.repositories.snapshot_repository import SnapshotRepository
+from app.repositories.execute_log_repository import ExecuteLogRepository
+from app.repositories.subscription_repository import SubscriptionRepository
