@@ -45,7 +45,7 @@ async def process_specific_scenario(model: ExecuteModel):
     }
 
 
-@router.post('/')
+@router.post('')
 async def create_subscription(model: SubscriptionRequest):
     ensure_subscription_type(model.type)
 
@@ -64,7 +64,7 @@ async def create_subscription(model: SubscriptionRequest):
         raise HTTPException(status_code=400, detail="service result is False")
 
 
-@router.delete('/')
+@router.delete('')
 async def delete_subscription(model: SubscriptionRequest):
     ensure_subscription_type(model.type)
 
