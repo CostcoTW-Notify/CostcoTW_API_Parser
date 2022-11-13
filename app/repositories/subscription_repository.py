@@ -21,7 +21,18 @@ class SubscriptionRepository(MongoRepository):
 
     def create_subscription(self, subscription: Subscription) -> bool:
 
-        result = self.collection.insert_one(dict(subscription))
+        # insert or update
+        result = self.collection.update_one(
+            dict(subscription),
+            {
+                "$set": {
+                    "token": subscription['token'],
+                    "code": subscription['code'],
+                    "subscriptionType": subscription['subscriptionType']
+                }
+            },
+            True
+        )
         return result.acknowledged
 
     def delete_subscription(self, subscription: Subscription) -> bool:

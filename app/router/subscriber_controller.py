@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from app.repositories import SnapshotRepository, ExecuteLogRepository, SubscriptionRepository, InventoryCheckRepository
 from app.services import DailyCheckService, SubscriptionService, LineNotifyService, InventoryCheckService, CostcoApiService
 from app.models.request.execute_model import ExecuteModel
-from app.models.request.subscription_model import SubscriptionRequest
+from app.models.request.subscription_model import SubscriptionRequest, RequestType, SubscriptionType
 from app.models.request.token_model import TokenModel
 from app.utility.constant import DAILY_NEW_BEST_BUY, DAILY_NEW_ONSALE, INVENTORY_CHECK
 
@@ -45,52 +45,37 @@ async def process_specific_scenario(model: ExecuteModel):
     }
 
 
-@router.post('')
-async def create_subscription(model: SubscriptionRequest):
-    ensure_subscription_type(model.type)
+@router.patch('')
+async def change_subscription(model: SubscriptionRequest):
 
-    service = SubscriptionService(subscription_repo=SubscriptionRepository())
+    if model.requestType == RequestType.Unknown:
+        raise Exception("Invalid 'requestType'")
 
-    if (model.type == INVENTORY_CHECK and model.code is None):
-        raise HTTPException(status_code=400, detail="Missing 'code'")
+    if (model.subscriptionType == SubscriptionType.Unknown):
+        raise Exception("Invalid 'subscriptionType")
 
-    result = await service.create_new_subscription(model)
+    if model.requestType == RequestType.Create:
+        if model.subscriptionType == SubscriptionType.InventoryCheck and model.code is None:
+            raise Exception("Invalid 'code'")
 
-    if result:
+    process_result: bool
+    service = SubscriptionService(SubscriptionRepository())
+
+    if model.requestType == RequestType.Create:
+        process_result = await service.create_new_subscription(model)
+
+    elif model.requestType == RequestType.Delete and model.subscriptionType is None:
+        process_result = await service.delete_by_token(model.token)
+
+    elif model.requestType == RequestType.Delete and model.subscriptionType is not None:
+        process_result = await service.delete_subscription(model)
+
+    else:
+        raise (Exception("Unknown error"))
+
+    if process_result:
         return {
             'status': 'success'
         }
     else:
         raise HTTPException(status_code=400, detail="service result is False")
-
-
-@router.delete('')
-async def delete_subscription(model: SubscriptionRequest):
-    ensure_subscription_type(model.type)
-
-    service = SubscriptionService(subscription_repo=SubscriptionRepository())
-
-    if (model.type == INVENTORY_CHECK and model.code is None):
-        raise HTTPException(status_code=400, detail="Missing 'code'")
-
-    result = await service.delete_subscription(model)
-    if result:
-        return {
-            'status': 'success'
-        }
-    else:
-        raise HTTPException(status_code=400, detail="service result is False")
-
-
-@router.delete('/token')
-async def delete_token(model: TokenModel):
-    service = SubscriptionService(subscription_repo=SubscriptionRepository())
-
-    result = await service.delete_by_token(model.token)
-
-    if not result:
-        raise HTTPException(status_code=400, detail="service result is False")
-
-    return {
-        'status': 'success'
-    }
