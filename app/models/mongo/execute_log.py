@@ -3,5 +3,5 @@ from datetime import datetime
 
 
 class ExecuteLogModel(TypedDict):
-    Type: str
-    ExecuteDate: datetime
+    type: str
+    executeDate: datetime

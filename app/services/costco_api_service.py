@@ -81,4 +81,18 @@ class CostcoApiService:
         return products
 
     async def _fetch_product_by_code(self, code: str) -> Product:
-        return NotImplemented
+        costco_url = f'https://www.costco.com.tw/rest/v2/taiwan/products/{code}'
+
+        async with httpx.AsyncClient() as client:
+            client.timeout = httpx.Timeout(10)
+
+            headers = client.headers
+            headers['User-Agent'] += " CostcoTW-Notify/0.1"
+            headers['Accept'] = 'application/json'
+            client.headers = headers
+
+            response = await client.get(costco_url,  headers=headers)
+
+            json = response.json()
+            product = ProductHelper.parse(json)
+            return product

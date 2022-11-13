@@ -13,7 +13,7 @@ class SubscriptionRepository(MongoRepository):
     def get_subscription(self, type: str) -> list[Subscription]:
 
         query = {
-            "subscription_type": type
+            "subscriptionType": type
         }
         data = self.collection.find(query)
         result = list(data)

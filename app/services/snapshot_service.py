@@ -1,6 +1,6 @@
 from app.services.costco_api_service import CostcoApiService
 from app.repositories import SnapshotRepository
-from app.utility import DateTimeHelper
+from app.utility.datetime_helper import DateTimeHelper
 
 
 class SnapshotService:
