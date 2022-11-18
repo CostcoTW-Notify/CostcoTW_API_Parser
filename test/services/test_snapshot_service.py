@@ -1,18 +1,40 @@
+import pytest
 from pytest_mock import MockerFixture
-from app.services import snapshot_all_products
-import app.services.snapshot_service as SnapshotService
+from app.services.snapshot_service import \
+    SnapshotService, SnapshotRepository, CostcoApiService
 import asyncio
 
 
-def test_snapshot_all_products_will_call_correct_method(mocker: MockerFixture):
+def test_snapshot_all_products_will_insert_data_to_database(
+    mocker: MockerFixture,
+):
 
-    fetch_all_products = mocker.patch.object(
-        SnapshotService, 'fetch_all_products')
+    repo = mocker.MagicMock()
+    costco_service = mocker.MagicMock()
+    fetch_method = mocker.AsyncMock()
+    costco_service.fetch_all_products = fetch_method
+    repo.count_products = mocker.MagicMock(return_value=0)
+    service = SnapshotService(repo, costco_service)
 
-    insert_products = mocker.patch.object(
-        SnapshotService.MongoRepository, 'insert_products')
+    # action
+    asyncio.run(service.snapshot_all_products())
 
-    asyncio.run(snapshot_all_products())
+    # assert
+    assert fetch_method.call_count == 1
+    assert repo.insert_products.call_count == 1
 
-    fetch_all_products.assert_called_once()
-    insert_products.assert_called_once()
+
+def test_snapshot_all_products_will_raise_exception_if_today_already_snapshot_products(
+    mocker: MockerFixture
+):
+
+    repo = mocker.MagicMock()
+    costco_service = mocker.MagicMock()
+    fetch_method = mocker.AsyncMock()
+    costco_service.fetch_all_products = fetch_method
+    repo.count_products = mocker.MagicMock(return_value=1)
+    service = SnapshotService(repo, costco_service)
+
+    # action & assert
+    with pytest.raises(Exception):
+        asyncio.run(service.snapshot_all_products())
