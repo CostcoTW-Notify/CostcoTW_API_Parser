@@ -1,13 +1,14 @@
+from pymongo import MongoClient
+from pymongo.collection import Collection
 from app.repositories.mongo_repository import MongoRepository
 from app.models.mongo.execute_log import ExecuteLogModel
 from app.utility.datetime_helper import DateTimeHelper
-from pymongo.collection import Collection
 
 
 class ExecuteLogRepository(MongoRepository):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mongo: MongoClient) -> None:
+        super().__init__(mongo)
         self.collection: Collection[ExecuteLogModel] = self.mongo_db.get_collection(
             "ExecuteLog")
 

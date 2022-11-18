@@ -1,14 +1,14 @@
-from fastapi import APIRouter
-from app.services import SnapshotService, CostcoApiService, DailyCheckService, LineNotifyService
-from app.repositories import SnapshotRepository, SubscriptionRepository, ExecuteLogRepository
-
+from fastapi import APIRouter, Depends
+from app.services import SnapshotService, DailyCheckService
+from app.dependency_injection.services import \
+    require_SnapshotService, require_DailyCheckService
 router = APIRouter(prefix='/products')
 
 
 @router.post('/snapshot')
-async def snapshot_all_product():
-
-    service = SnapshotService(SnapshotRepository(), CostcoApiService())
+async def snapshot_all_product(
+    service: SnapshotService = Depends(require_SnapshotService)
+):
 
     result = await service.snapshot_all_products()
 
@@ -19,12 +19,10 @@ async def snapshot_all_product():
 
 
 @router.get('/new_best_buy')
-async def detect_today_new_best_buy_item():
+async def detect_today_new_best_buy_item(
+    service: DailyCheckService = Depends(require_DailyCheckService)
+):
 
-    service = DailyCheckService(line_notify_service=LineNotifyService(),
-                                snapshot_repo=SnapshotRepository(),
-                                subscription_repo=SubscriptionRepository(),
-                                execute_log_repo=ExecuteLogRepository())
     items = service._detect_today_new_best_buy_items()
 
     result = [{
@@ -40,12 +38,10 @@ async def detect_today_new_best_buy_item():
 
 
 @router.get('/new_onsale')
-async def detect_today_new_onsale_item():
+async def detect_today_new_onsale_item(
+    service: DailyCheckService = Depends(require_DailyCheckService)
+):
 
-    service = DailyCheckService(line_notify_service=LineNotifyService(),
-                                snapshot_repo=SnapshotRepository(),
-                                subscription_repo=SubscriptionRepository(),
-                                execute_log_repo=ExecuteLogRepository())
     items = service._detect_today_new_onsale_items()
 
     result = [{

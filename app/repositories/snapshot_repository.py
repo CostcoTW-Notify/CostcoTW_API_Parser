@@ -1,3 +1,4 @@
+from pymongo import MongoClient
 from pymongo.collection import Collection
 from app.repositories.mongo_repository import MongoRepository
 from app.models.mongo.product import Product
@@ -5,8 +6,8 @@ from app.models.mongo.product import Product
 
 class SnapshotRepository(MongoRepository):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mongo: MongoClient) -> None:
+        super().__init__(mongo)
         self.collection: Collection[Product] = self.mongo_db.get_collection(
             "DailySnapshot")
 

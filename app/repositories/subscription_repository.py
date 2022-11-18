@@ -1,12 +1,13 @@
 from app.repositories.mongo_repository import MongoRepository
 from app.models.mongo.subscription import Subscription
 from pymongo.collection import Collection
+from pymongo import MongoClient
 
 
 class SubscriptionRepository(MongoRepository):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mongo: MongoClient) -> None:
+        super().__init__(mongo)
         self.collection: Collection[Subscription] = self.mongo_db.get_collection(
             'Subscription')
 

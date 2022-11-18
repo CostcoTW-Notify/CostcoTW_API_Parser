@@ -1,13 +1,14 @@
+from pymongo import MongoClient
+from pymongo.collection import Collection
 from app.repositories.mongo_repository import MongoRepository
 from app.models.mongo.inventory_check import InventoryCheck
 from datetime import datetime
-from pymongo.collection import Collection
 
 
 class InventoryCheckRepository(MongoRepository):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, mongo: MongoClient) -> None:
+        super().__init__(mongo)
         self.collection: Collection[InventoryCheck] = self.mongo_db.get_collection(
             'InventoryCheck')
 

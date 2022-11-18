@@ -1,11 +1,10 @@
-from fastapi import APIRouter, HTTPException
-from app.repositories import SnapshotRepository, ExecuteLogRepository, SubscriptionRepository, InventoryCheckRepository
-from app.services import DailyCheckService, SubscriptionService, LineNotifyService, InventoryCheckService, CostcoApiService
+from fastapi import APIRouter, HTTPException, Depends
+from app.services import SubscriptionService, DailyCheckService, InventoryCheckService
 from app.models.request.execute_model import ExecuteModel
 from app.models.request.subscription_model import SubscriptionRequest, RequestType, SubscriptionType
-from app.models.request.token_model import TokenModel
 from app.utility.constant import DAILY_NEW_BEST_BUY, DAILY_NEW_ONSALE, INVENTORY_CHECK
-
+from app.dependency_injection.services \
+    import require_DailyCheckService, require_InventoryCheckService, require_SubscriptionService
 router = APIRouter(prefix='/subscription')
 
 
@@ -17,28 +16,21 @@ def ensure_subscription_type(type: str):
 
 
 @router.post('/process')
-async def process_specific_scenario(model: ExecuteModel):
+async def process_specific_scenario(
+    model: ExecuteModel,
+    daily_check_service: DailyCheckService = Depends(
+        require_DailyCheckService),
+    inventory_check_service: InventoryCheckService = Depends(
+        require_InventoryCheckService)
+):
     ensure_subscription_type(model.SubscriptionType)
 
     if model.SubscriptionType == DAILY_NEW_ONSALE:
-        service = DailyCheckService(line_notify_service=LineNotifyService(),
-                                    snapshot_repo=SnapshotRepository(),
-                                    subscription_repo=SubscriptionRepository(),
-                                    execute_log_repo=ExecuteLogRepository())
-        await service.process_daily_new_onsale_subscription()
+        await daily_check_service.process_daily_new_onsale_subscription()
     elif model.SubscriptionType == DAILY_NEW_BEST_BUY:
-        service = DailyCheckService(line_notify_service=LineNotifyService(),
-                                    snapshot_repo=SnapshotRepository(),
-                                    subscription_repo=SubscriptionRepository(),
-                                    execute_log_repo=ExecuteLogRepository())
-        await service.process_daily_new_best_buy_subscription()
+        await daily_check_service.process_daily_new_best_buy_subscription()
     elif model.SubscriptionType == INVENTORY_CHECK:
-        service = InventoryCheckService(costco_api_service=CostcoApiService(),
-                                        line_notify_service=LineNotifyService(),
-                                        inventory_check_repo=InventoryCheckRepository(),
-                                        subscription_repo=SubscriptionRepository())
-
-        await service.process_inventory_check()
+        await inventory_check_service.process_inventory_check()
 
     return {
         'status': 'Done'
@@ -46,7 +38,10 @@ async def process_specific_scenario(model: ExecuteModel):
 
 
 @router.patch('')
-async def change_subscription(model: SubscriptionRequest):
+async def change_subscription(
+    model: SubscriptionRequest,
+    service: SubscriptionService = Depends(require_SubscriptionService)
+):
 
     if model.requestType == RequestType.Unknown:
         raise Exception("Invalid 'requestType'")
@@ -59,7 +54,6 @@ async def change_subscription(model: SubscriptionRequest):
             raise Exception("Invalid 'code'")
 
     process_result: bool
-    service = SubscriptionService(SubscriptionRepository())
 
     if model.requestType == RequestType.Create:
         process_result = await service.create_new_subscription(model)
