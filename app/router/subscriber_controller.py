@@ -26,9 +26,9 @@ async def process_specific_scenario(
     ensure_subscription_type(model.SubscriptionType)
 
     if model.SubscriptionType == DAILY_NEW_ONSALE:
-        await daily_check_service.process_daily_new_onsale_subscription()
+        await daily_check_service.process_daily_check(SubscriptionType.DailyNewOnsale)
     elif model.SubscriptionType == DAILY_NEW_BEST_BUY:
-        await daily_check_service.process_daily_new_best_buy_subscription()
+        await daily_check_service.process_daily_check(SubscriptionType.DailyNewBestBuy)
     elif model.SubscriptionType == INVENTORY_CHECK:
         await inventory_check_service.process_inventory_check()
 

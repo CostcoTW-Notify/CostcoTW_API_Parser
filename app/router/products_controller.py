@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 from app.services import SnapshotService, DailyCheckService
+from app.models.enums import SubscriptionType
 from app.dependency_injection.services import \
     require_SnapshotService, require_DailyCheckService
 router = APIRouter(prefix='/products')
@@ -23,7 +24,8 @@ async def detect_today_new_best_buy_item(
     service: DailyCheckService = Depends(require_DailyCheckService)
 ):
 
-    items = service._detect_today_new_best_buy_items()
+    items = service._detect_today_new_item(
+        job_type=SubscriptionType.DailyNewBestBuy)
 
     result = [{
         "code": p['code'],
@@ -42,7 +44,8 @@ async def detect_today_new_onsale_item(
     service: DailyCheckService = Depends(require_DailyCheckService)
 ):
 
-    items = service._detect_today_new_onsale_items()
+    items = service._detect_today_new_item(
+        job_type=SubscriptionType.DailyNewOnsale)
 
     result = [{
         "code": p['code'],
