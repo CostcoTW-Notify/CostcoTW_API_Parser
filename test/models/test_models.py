@@ -1,6 +1,6 @@
 import json
 import pytest
-from app.models.mongo.product import Product
+from app.utility import ProductHelper
 from json import loads
 
 
@@ -15,22 +15,21 @@ def get_single_product_json():
 
 def test_Product_parse(get_single_product_json):
 
-    product = Product.parse(get_single_product_json)
+    product = ProductHelper.parse(get_single_product_json)
 
-    assert product.code == '217455'
-    assert product.zhName == 'Ariel 抗菌抗臭洗衣精補充包 1260公克 X 6入'
-    assert product.price == 719
-    assert product.onSaleInfo is not None
-    assert product.onSaleInfo.basePrice == 899
+    assert product['code'] == '217455'
+    assert product['zhName'] == 'Ariel 抗菌抗臭洗衣精補充包 1260公克 X 6入'
+    assert product['price'] == 719
+    assert product['onSaleInfo'] is not None
+    assert product['onSaleInfo']['basePrice'] == 899
 
 
 def test_Product_to_dict(get_single_product_json):
 
-    product = Product.parse(get_single_product_json)
-    prod_dict = product.to_dict()
+    product = ProductHelper.parse(get_single_product_json)
+    prod_dict = dict(product)
 
     assert prod_dict['code'] == '217455'
     assert prod_dict['zhName'] == 'Ariel 抗菌抗臭洗衣精補充包 1260公克 X 6入'
     assert prod_dict['price'] == 719
     assert prod_dict['onSaleInfo'] is not None
-    assert prod_dict['onSaleInfo']['basePrice'] == 899
