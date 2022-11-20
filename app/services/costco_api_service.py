@@ -80,7 +80,7 @@ class CostcoApiService:
 
         return products
 
-    async def _fetch_product_by_code(self, code: str) -> Product:
+    async def _fetch_product_by_code(self, code: str) -> Product | None:
         costco_url = f'https://www.costco.com.tw/rest/v2/taiwan/products/{code}'
 
         async with httpx.AsyncClient() as client:
@@ -92,6 +92,9 @@ class CostcoApiService:
             client.headers = headers
 
             response = await client.get(costco_url,  headers=headers)
+
+            if (response.status_code != 200):
+                return None
 
             json = response.json()
             product = ProductHelper.parse(json)

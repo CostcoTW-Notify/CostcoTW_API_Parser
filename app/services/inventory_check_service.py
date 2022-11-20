@@ -50,6 +50,9 @@ class InventoryCheckService:
     async def _check_items_inventory(self, code: str) -> Product | None:
         product = await self.costco_api_service._fetch_product_by_code(code)
 
+        if (product is None):
+            return None
+
         last_check_count = self.inventory_check_repo.get_last_check_stock_count(
             code)
 

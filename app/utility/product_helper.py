@@ -13,8 +13,8 @@ class ProductHelper:
             for j in json['decalData']:
                 key = j['key']
                 value = j['value']
-                altText = value['altText']
-                position = value['position']
+                altText = value['altText'] if "altText" in j else ""
+                position = value['position'] if "position" in j else -1
                 url = value['url']
                 info = DecalInfo(altText=altText, position=position, url=url)
                 kv = KeyValuePair(key=key, value=info)
