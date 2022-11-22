@@ -1,11 +1,22 @@
-
-from fastapi import FastAPI, Request
-from fastapi.responses import RedirectResponse, JSONResponse
-from fastapi.encoders import jsonable_encoder
+import traceback
+from fastapi import FastAPI, Request, Response, Depends
+from fastapi.responses import RedirectResponse
+from pymongo import MongoClient
+from app.repositories.server_log_repository import ServerLogRepository
+from app.models.mongo.server_log import ServerLog, datetime, HttpRequest
 import app.router as app_router
 from os import getenv
 
-asgi_app = FastAPI()
+
+async def setBody(request: Request):
+    if 'content-type' not in request.headers:
+        return
+
+    if request.headers['content-type'] == 'application/json':
+        body = await request.json()
+        request.state.body = body
+
+asgi_app = FastAPI(dependencies=[Depends(setBody)])
 asgi_app.include_router(app_router.SearchRouter)
 asgi_app.include_router(app_router.ProductRouter)
 asgi_app.include_router(app_router.SubscriberRouter)
@@ -25,23 +36,50 @@ def check_env():
 @asgi_app.middleware('http')
 async def error_handler(request: Request, call_next):
 
-    try:
-        return await call_next(request)
-    except Exception as e:
+    conn_str = getenv("mongo_conn_str")
+    with MongoClient(conn_str) as client:
+        repo = ServerLogRepository(client)
 
-        error_data = {
-            'status': '500',
-            'message': 'There are some exception occur when process request',
-            'request_url': request.url,
-            'error': str(e)
-        }
-        json = jsonable_encoder(error_data)
-        print("=========== Error ============")
-        print(json)
-        print("==============================")
-        return JSONResponse(
-            status_code=400,
-            content=json)
+        start_time = datetime.now()
+        try:
+            response: Response = await call_next(request)
+            process_time = int(
+                (datetime.now() - start_time).microseconds / 1000)
+            body = request.state.body if hasattr(
+                request.state, 'body') else None
+            req = HttpRequest(
+                path=str(request.url),
+                method=request.method,
+                body=body
+            )
+            repo.insert_log(ServerLog(
+                start_time=start_time,
+                process_time=process_time,
+                request=req,
+                response_status=response.status_code,
+                error=None
+            ))
+            return response
+
+        except Exception:
+            process_time = int(
+                (datetime.now() - start_time).microseconds / 1000)
+            body = request.state.body if hasattr(
+                request.state, 'body') else None
+            req = HttpRequest(
+                path=str(request.url),
+                method=request.method,
+                body=body
+            )
+            error = traceback.format_exc()
+            repo.insert_log(ServerLog(
+                start_time=start_time,
+                process_time=process_time,
+                request=req,
+                response_status=500,
+                error=error
+            ))
+            raise
 
 
 @asgi_app.get('/')
