@@ -4,7 +4,10 @@ from pymongo import MongoClient
 
 def require_MongoClient():
     conn_str = getenv("mongo_conn_str")
-    with MongoClient(conn_str) as client:
+    client = MongoClient(conn_str)
+    try:
         print("connect mongo db")
         yield client
-    print("mongo db disconnect")
+    finally:
+        client.close()
+        print("mongo db disconnect")
