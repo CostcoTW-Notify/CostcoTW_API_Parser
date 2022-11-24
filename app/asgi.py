@@ -29,9 +29,13 @@ def check_env():
     if mongo_conn_str is None:
         raise KeyError('env: mongo_conn_str not setup..')
 
-    append_line_notify_endpoint = getenv('append_line_notify_endpoint')
-    if append_line_notify_endpoint is None:
+    gcp_intergration_topic_path = getenv('gcp_intergration_topic_path')
+    if gcp_intergration_topic_path is None:
         raise KeyError('evn: append_line_notify_endpoint not setup...')
+
+    GOOGLE_APPLICATION_CREDENTIALS = getenv('GOOGLE_APPLICATION_CREDENTIALS')
+    if GOOGLE_APPLICATION_CREDENTIALS is None:
+        raise KeyError('env: GOOGLE_APPLICATION_CREDENTIALS not setup...')
 
 
 @asgi_app.middleware('http')
