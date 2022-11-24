@@ -20,6 +20,7 @@ asgi_app = FastAPI(dependencies=[Depends(setBody)])
 asgi_app.include_router(app_router.SearchRouter)
 asgi_app.include_router(app_router.ProductRouter)
 asgi_app.include_router(app_router.SubscriberRouter)
+asgi_app.include_router(app_router.IntergrationRouter)
 
 
 @asgi_app.on_event('startup')
