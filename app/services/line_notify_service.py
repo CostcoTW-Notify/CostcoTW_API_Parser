@@ -1,26 +1,27 @@
 from os import getenv
-import httpx
+from google.cloud.pubsub_v1 import PublisherClient
+from google.cloud.pubsub_v1.futures import Future
+from json import dumps
+from app.models.events.intergration.send_line_notify_event import SendLineNotifyEvent, EVENT_TYPE
 
 
 class LineNotifyService:
 
     def __init__(self) -> None:
-        self.line_notify_endpoint = getenv(
-            'append_line_notify_endpoint')
-        pass
+        self.publisher = PublisherClient()
+        self.intergration_topic = getenv('gcp_intergration_topic_path') or ""
 
-    async def appendPendingMessage(self, token: list[str], messages: list[str]) -> None:
-        
-        if (self.line_notify_endpoint is None):
-            raise Exception("Missing append_line_notify_endpoint")
+    def appendPendingMessage(self, token: list[str], messages: list[str]) -> None:
 
-        print(f"send append pending message request...")
-
-        async with httpx.AsyncClient() as client:
-            client.timeout = httpx.Timeout(10)
-            response = await client.post(self.line_notify_endpoint, json={
-                "tokens": token,
-                "messages": messages
-            })
-            if response.status_code != 200 and response.status_code != 201:
-                raise Exception("Send message to line-notify-sender fail...")
+        for t in token:
+            for m in messages:
+                data = SendLineNotifyEvent(
+                    token=t,
+                    message=m
+                )
+                json = bytes(dumps(data), 'utf-8')
+                task: Future = self.publisher.publish(
+                    self.intergration_topic,
+                    data=json,
+                    eventType=EVENT_TYPE, application="CostcoTW-API-Parser")
+                result = task.result()

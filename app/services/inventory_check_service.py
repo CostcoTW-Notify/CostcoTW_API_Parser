@@ -24,7 +24,6 @@ class InventoryCheckService:
 
         codes = set([x['code'] for x in subscriber])
 
-        tasks = []
         for code in codes:
             if (code is None):
                 continue
@@ -40,11 +39,8 @@ class InventoryCheckService:
             tokens = [i['token']
                       for i in filter(lambda x: x['code'] == code, subscriber)]
 
-            tasks.append(self.line_notify_service.appendPendingMessage(
-                tokens, [message]))
+            self.line_notify_service.appendPendingMessage(tokens, [message])
 
-        if (len(tasks) > 0):
-            await asyncio.wait(tasks)  # No need to check result
         pass
 
     async def _check_items_inventory(self, code: str) -> Product | None:
