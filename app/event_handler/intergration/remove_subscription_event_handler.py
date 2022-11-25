@@ -32,7 +32,7 @@ class RemoveSubscriptionEventHandler(EventHandler):
             return
 
         request = SubscriptionRequest(
-            code=event['code'],
+            code=event['Code'],
             requestType=RequestType.Delete,
             subscriptionType=type,
             token=event['Subscriber']
