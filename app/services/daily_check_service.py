@@ -40,9 +40,13 @@ class DailyCheckService:
             return
 
         messages = [
-            NotifyMessageHelper.build_new_onsale_item_notify_message(p) for p in items]
+            NotifyMessageHelper.build_new_onsale_item_notify_message(p)
+            if job_type == SubscriptionType.DailyNewOnsale else
+            NotifyMessageHelper.build_new_best_buy_item_notify_message(p)
+            for p in items]
 
-        await self.line_notify_service.appendPendingMessage([s['token'] for s in subscriber], messages)
+        self.line_notify_service.appendPendingMessage(
+            [s['token'] for s in subscriber], messages)
 
         self.execute_log_repo.create_today_execute_log(type)
 
@@ -50,31 +54,31 @@ class DailyCheckService:
 
     def _detect_today_new_item(self, job_type: SubscriptionType):
 
-        yesterday_best_buy_items = self.snapshot_repo.get_products(
+        yesterday_items = self.snapshot_repo.get_products(
             self._create_query_filter(
                 job_type,
                 gt=DateTimeHelper.get_today_with_timezone(-1),
                 lt=DateTimeHelper.get_today_with_timezone()
             ))
 
-        if (len(yesterday_best_buy_items) == 0):
+        if (len(yesterday_items) == 0):
             return []
 
-        today_best_buy_items = self.snapshot_repo.get_products(
+        today_items = self.snapshot_repo.get_products(
             self._create_query_filter(
                 job_type,
                 gt=DateTimeHelper.get_today_with_timezone(),
                 lt=DateTimeHelper.get_today_with_timezone(+1)
             ))
 
-        today_items_code = set([p['code'] for p in today_best_buy_items])
+        today_items_code = set([p['code'] for p in today_items])
         yesterday_items_code = set([p['code']
-                                   for p in yesterday_best_buy_items])
+                                   for p in yesterday_items])
 
         today_new_items_code = today_items_code - yesterday_items_code
 
         today_new_items = filter(
-            lambda p: p['code'] in today_new_items_code, today_best_buy_items)
+            lambda p: p['code'] in today_new_items_code, today_items)
 
         return list(today_new_items)
 
