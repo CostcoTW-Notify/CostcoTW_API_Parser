@@ -8,4 +8,4 @@ class RemoveSubscriptionEvent(TypedDict):
     Subscriber: str  # LineNotify token ,email address... etc.
 
     SubscriptionType: str  # DailyNewOnSale, DailyBestBuy, InventoryCheck
-    code: Optional[str]
+    Code: Optional[str]
